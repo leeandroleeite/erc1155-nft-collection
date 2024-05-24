@@ -5,7 +5,7 @@ async function main() {
   const ERC1155Token = await ethers.getContractFactory("ERC1155Token");
 
   // Specify the URI for the token metadata
-  const uri = "https://your-metadata-url.com/{id}.json";
+  const uri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
 
   // Deploy the contract with the specified URI
   const erc1155 = await ERC1155Token.deploy(uri);
