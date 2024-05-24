@@ -6,9 +6,11 @@ async function main() {
 
   // Specify the URI for the token metadata
   const uri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
+  const contractName = "myERC1155contract_v1"
+  const mintPriceInMatic = ethers.parseEther("0.02"); // Convert 0.02 Matic to Wei
 
   // Deploy the contract with the specified URI
-  const erc1155 = await ERC1155Token.deploy(uri);
+  const erc1155 = await ERC1155Token.deploy(contractName, uri, mintPriceInMatic);
 
   // Wait for the deployment to be mined
   await erc1155.waitForDeployment();

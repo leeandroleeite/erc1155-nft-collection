@@ -19,14 +19,27 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Example: Mint Tokens
-    const tokenId = 1; // ID of the token you want to mint
-    const recipientAddress = process.env.RECIPIENT_ADDRESS;
-    const amount = 1; // Amount of tokens to mint
-    const data = "0x"; // Optional data, usually empty for minting
-    const tx = await contract.mint(recipientAddress, tokenId, amount, data); // Updated for ethers.js v5
-    await tx.wait();
-    console.log(`Minted ${amount} tokens of ID ${tokenId} for address ${recipientAddress}`);
+// Example: Mint Tokens
+const tokenId = 29; // ID of the token you want to mint
+const recipientAddress = process.env.RECIPIENT_ADDRESS;
+const amount = 2; // Amount of tokens to mint
+const payment = (0.02 * amount).toString()
+const mintPriceInMatic = ethers.parseEther(payment); // Convert 0.02 Matic to Wei
+const data = "0x"; // Optional data, usually empty for minting
+
+// Check if the wallet has sufficient balance for the minting
+const balance = await provider.getBalance(`${process.env.RECIPIENT_ADDRESS}`);
+if (balance<=(mintPriceInMatic)) {
+    throw new Error("Insufficient balance for minting");
+}
+
+// Send transaction to mint tokens
+const overrides = {
+    value: mintPriceInMatic
+};
+const tx = await contract.mint(tokenId, amount, data, overrides); // Updated for ethers.js v5
+await tx.wait();
+console.log(`Minted ${amount} tokens of ID ${tokenId} for address ${recipientAddress}`);
 }
 
 main().catch(error => {
