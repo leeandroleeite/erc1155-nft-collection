@@ -13,6 +13,9 @@ async function main() {
     const provider = ethers.getDefaultProvider("matic-amoy");
     const wallet = new ethers.Wallet(privateKey, provider);
 
+    const fromAddress = wallet.address;
+
+
     // ERC-1155 contract ABI
     const abi = contractArtifact.abi;
 
@@ -21,25 +24,28 @@ async function main() {
 
 // Example: Mint Tokens
 const tokenId = 29; // ID of the token you want to mint
-const recipientAddress = process.env.RECIPIENT_ADDRESS;
+// const recipientAddress = fromAddress;
 const amount = 2; // Amount of tokens to mint
 const payment = (0.02 * amount).toString()
 const mintPriceInMatic = ethers.parseEther(payment); // Convert 0.02 Matic to Wei
 const data = "0x"; // Optional data, usually empty for minting
 
 // Check if the wallet has sufficient balance for the minting
-const balance = await provider.getBalance(`${process.env.RECIPIENT_ADDRESS}`);
+const balance = await provider.getBalance(fromAddress);
 if (balance<=(mintPriceInMatic)) {
     throw new Error("Insufficient balance for minting");
 }
 
+
 // Send transaction to mint tokens
 const overrides = {
-    value: mintPriceInMatic
+    value: mintPriceInMatic,
+    from: fromAddress
 };
-const tx = await contract.mint(tokenId, amount, data, overrides); // Updated for ethers.js v5
+
+const tx = await contract.mint(tokenId, amount, data, overrides);
 await tx.wait();
-console.log(`Minted ${amount} tokens of ID ${tokenId} for address ${recipientAddress}`);
+console.log(`Minted ${amount} tokens of ID ${tokenId} for address ${fromAddress}`);
 }
 
 main().catch(error => {
