@@ -13,6 +13,8 @@ async function main() {
   const totalCopies = 100;
 
 
+
+
   // Deploy the contract with the specified URI
   const erc1155 = await ERC1155Token.deploy(uri, mintPrice, totalCopies, projectOwnerAddress, developerAddress, carbonCreditWallet, carbonCreditPrice);
 
