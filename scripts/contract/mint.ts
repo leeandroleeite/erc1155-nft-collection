@@ -22,9 +22,9 @@ async function main() {
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
 // Example: Mint Tokens
-const tokenId = 29; // ID of the token you want to mint
+const tokenId = 27; // ID of the token you want to mint
 // const recipientAddress = fromAddress;
-const amount = 2; // Amount of tokens to mint
+const amount = 3; // Amount of tokens to mint
 const payment = (0.02 * amount).toString()
 const mintPriceInMatic = ethers.parseEther(payment); // Convert 0.02 Matic to Wei
 const data = "0x"; // Optional data, usually empty for minting
