@@ -7,9 +7,8 @@ async function main() {
   const contractName = "ConsciousPlanetCollection"
   const uri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
   const mintPrice = ethers.parseEther("0.02"); // Convert 0.02 Matic to Wei
-  const projectOwner = '0x0Bd0F2Dafc27F7CBF9349c4939e83FE5B0345cDE'
-  const developerAddress = "0x967D8384750A72B06631156416FD9d59c5F334f5";
-  const carbonCreditWallet="0x02cC4687d44485FD6F08D971a973A857B053F966";
+  const projectOwner = `${process.env.PROJECT_OWNER}`;
+  const developerAddress = `${process.env.DEVELOPER_ADDRESS}`;
   const carbonCreditPrice=ethers.parseEther("0.001");
   const artistShare = 80;
   const curatorShare = 5;
@@ -18,7 +17,7 @@ async function main() {
   const artistRoyalty = 10;
 
   // Deploy the contract with the specified URI
-  const erc1155 = await ERC1155Token.deploy(contractName, uri, mintPrice, projectOwner, carbonCreditWallet, carbonCreditPrice, artistShare, curatorShare, projectOwnerShare, developerShare, artistRoyalty);
+  const erc1155 = await ERC1155Token.deploy(contractName, uri, mintPrice, projectOwner, carbonCreditPrice, artistShare, curatorShare, projectOwnerShare, developerShare, artistRoyalty, developerAddress);
 
   // Wait for the deployment to be mined
   await erc1155.waitForDeployment();

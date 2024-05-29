@@ -1,0 +1,4 @@
+npx hardhat compile
+npx hardhat run scripts/deploy.ts --network amoy 
+npx hardhat run .\scripts\contract\InitializeArtworks.ts
+npx hardhat run .\scripts\contract\mint.ts

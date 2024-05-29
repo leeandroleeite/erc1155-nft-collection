@@ -25,14 +25,13 @@ contract ConsciousPlanetColletion is ERC1155, Ownable, ERC1155Supply {
     uint256 private _mintPrice; 
     address private _projectOwner;
     uint256 private _carbonCreditPrice;
-    address private _carbonCreditWallet;
     uint256 private _artistShare;
     uint256 private _curatorShare;
     uint256 private _projectOwnerShare;
     uint256 private _developerShare;
     uint256 private _artistRoyalty;
     uint256 private _totalCopies = 100;
-    address private _developerAddress = 0x6586102aDa64aB59C00546f8c2aE10E8AeEbf125; 
+    address private _developerAddress; 
 
     // Mapping from token ID to Artwork struct
     mapping(uint256 => Artwork) private artworks;
@@ -58,38 +57,38 @@ contract ConsciousPlanetColletion is ERC1155, Ownable, ERC1155Supply {
      * @param uri The base URI for the ERC1155 tokens.
      * @param mintPrice The price to mint each token.
      * @param projectOwner The address of the project owner.
-     * @param carbonCreditWallet The address to receive carbon credits.
      * @param carbonCreditPrice The price of carbon credits.
      * @param artistShare The share of minting fee for the artist.
      * @param curatorShare The share of minting fee for the curator.
      * @param projectOwnerShare The share of minting fee for the project owner.
      * @param developerShare The share of minting fee for the developer.
      * @param artistRoyalty The royalty percentage for the artist.
+     * @param developerAddress The address of the project developer.
      */
     constructor(
         string memory contractName, 
         string memory uri, 
         uint256 mintPrice, 
         address projectOwner, 
-        address carbonCreditWallet, 
         uint256 carbonCreditPrice,
         uint256 artistShare,
         uint256 curatorShare,
         uint256 projectOwnerShare,
         uint256 developerShare,
-        uint256 artistRoyalty
+        uint256 artistRoyalty,
+        address developerAddress
         ) 
         ERC1155(uri) Ownable(msg.sender) {
         _contractName = contractName;
         _mintPrice = mintPrice;
         _projectOwner = projectOwner;
-        _carbonCreditWallet = carbonCreditWallet;
         _carbonCreditPrice = carbonCreditPrice;
         _artistShare = artistShare;
         _curatorShare = curatorShare;
         _projectOwnerShare = projectOwnerShare;
         _developerShare = developerShare;
         _artistRoyalty = artistRoyalty;
+        _developerAddress = developerAddress;
     }    
 
     /**
@@ -128,6 +127,7 @@ contract ConsciousPlanetColletion is ERC1155, Ownable, ERC1155Supply {
         uint256 totalPayment = _mintPrice * amount;
 
         require(msg.value >= totalPayment, "Insufficient payment");
+        require(artworks[id].remainingCopies >= amount, "Not enough copies available");
 
         uint artworkPrice = totalPayment - _carbonCreditPrice;
 
@@ -215,22 +215,6 @@ contract ConsciousPlanetColletion is ERC1155, Ownable, ERC1155Supply {
      */
     function setDeveloperAddress(address newDeveloperAddress) external onlyOwner {
         _developerAddress = newDeveloperAddress;
-    }
-
-    /**
-     * @dev Function to get the carbon credit wallet address.
-     * @return The carbon credit wallet address.
-     */
-    function getCarbonCreditWallet() external onlyOwner view returns (address) {
-        return _carbonCreditWallet;
-    }
-
-    /**
-     * @dev Function to set a new carbon credit wallet address.
-     * @param newWallet The new carbon credit wallet address.
-     */
-    function setCarbonCreditWallet(address newWallet) external onlyOwner {
-        _carbonCreditWallet = newWallet;
     }
 
     /**
