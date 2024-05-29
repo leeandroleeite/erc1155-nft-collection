@@ -141,6 +141,12 @@ contract ConsciousPlanetColletion is ERC1155, Ownable, ERC1155Supply {
         payable(artworks[id].curator).transfer(curatorPayment);
         payable(_projectOwner).transfer(projectOwnerPayment);
 
+        // Transfer the remaining balance to the contract owner
+        uint256 remainingBalance = address(this).balance;
+        if (remainingBalance > 0) {
+            payable(owner()).transfer(remainingBalance);
+        }
+
         _mint(msg.sender, id, amount, data);
         artworks[id].remainingCopies -= amount;
     }
