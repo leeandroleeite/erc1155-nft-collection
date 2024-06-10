@@ -10,7 +10,7 @@ describe('ERC1155Token', function () {
   let owner: any;
   let addr1: any;
   let addr2: any;
-  const contractName = 'Test ConsciousPlanetColletion';
+  const contractName = 'Test ConsciousPlanetCollection';
   const uri = 'https://example.com/token/{id}.json';
   const mintPrice = ethers.parseEther('0.02');
   const totalCopies = 100;

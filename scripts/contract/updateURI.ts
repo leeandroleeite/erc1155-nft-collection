@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import contractArtifact from "../../artifacts/contracts/ERC1155Token.sol/ERC1155Token.json";
+import contractArtifact from "../../artifacts/contracts/ConsciousPlanetCollection.sol/ConsciousPlanetCollection.json";
 
 // ERC-1155 contract address
 const contractAddress = `${process.env.CONTRACT_ADDRESS}`;

@@ -12,7 +12,7 @@ async function main() {
     const provider = ethers.getDefaultProvider("matic-amoy");
     const wallet = new ethers.Wallet(privateKey, provider);
 
-    const fromAddress = wallet.address;
+    const fromAddress = "0x967D8384750A72B06631156416FD9d59c5F334f5";
 
 
     // ERC-1155 contract ABI
@@ -22,16 +22,14 @@ async function main() {
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
     // Example: Mint Tokens
-    // const to = fromAddress;
-    const tokenId = 13; // ID of the token you want to mint
+    const to = fromAddress;
+    const tokenId = 14; // ID of the token you want to mint
     // const recipientAddress = fromAddress;
     const amount = 1; // Amount of tokens to mint
     const payment = (0.02 * amount).toString()
     const mintPriceInMatic = ethers.parseEther(payment); // Convert 0.02 Matic to Wei
     const data = "0x"; // Optional data, usually empty for minting
-    // const referral = `${process.env.REFERRAL_ADDRESS}`
-    const referral = ethers.ZeroAddress;
-
+    const referral = "0x"
 
     // Check if the wallet has sufficient balance for the minting
     const balance = await provider.getBalance(fromAddress);
@@ -46,7 +44,7 @@ const overrides = {
     // from: fromAddress
 };
 
-const tx = await contract.mint(tokenId, amount, data, referral, overrides);
+const tx = await contract.mintTo(fromAddress, tokenId, amount, data, referral, overrides);
 await tx.wait();
 console.log(`Minted ${amount} tokens of ID ${tokenId} for address ${fromAddress}`);
 }

@@ -2,22 +2,12 @@ import { ethers } from "hardhat";
 
 async function main() {
   // Get the contract factory
-  const ERC1155Token = await ethers.getContractFactory("ConsciousPlanetColletion");
+  const ERC1155Token = await ethers.getContractFactory("ConsciousPlanetCollection");
 
-  const contractName = "ConsciousPlanetCollection"
+  const contractName = "Conscious Planet Collection"
   const uri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
-  const mintPrice = ethers.parseEther("0.02"); // Convert 0.02 Matic to Wei
-  const projectOwner = `${process.env.PROJECT_OWNER}`;
-  const developerAddress = `${process.env.DEVELOPER_ADDRESS}`;
-  const carbonCreditPrice=ethers.parseEther("0.001");
-  const artistShare = 80;
-  const curatorShare = 5;
-  const projectOwnerShare = 10;
-  const developerShare = 5;
-  const artistRoyalty = 10;
-
-  // Deploy the contract with the specified URI
-  const erc1155 = await ERC1155Token.deploy(contractName, uri, mintPrice, projectOwner, carbonCreditPrice, artistShare, curatorShare, projectOwnerShare, developerShare, artistRoyalty, developerAddress);
+  
+  const erc1155 = await ERC1155Token.deploy(contractName, uri);
 
   // Wait for the deployment to be mined
   await erc1155.waitForDeployment();
