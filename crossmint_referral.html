@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossmint Pay Button</title>
+    <script src="https://unpkg.com/@crossmint/client-sdk-vanilla-ui@1.0.1-alpha.6/lib/index.global.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #ffffff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #crossmint-container {
+            display: flex;
+            align-items: flex-start;
+            background: transparent;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+        .left-panel {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .right-panel {
+            flex: 1;
+            text-align: left;
+        }
+        .explanation {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: #fff;
+        }
+        .artwork-display img, .artwork-display video {
+            width: 100%;
+            max-width: 380px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        const baseHash = 'QmbvAtxqKgJny7yVMBM7KYga9d9YfqayunWSSRMGmCdjd9';
+        const fileExtensions = {
+            1: 'png',
+            2: 'png',
+            3: 'png',
+            4: 'png',
+            5: 'png',
+            6: 'png',
+            7: 'png',
+            8: 'png',
+            9: 'png',
+            10: 'png',
+            11: 'png',
+            12: 'png',
+            13: 'mp4',
+            14: 'jpg',
+            15: 'gif',
+            16: 'png',
+            17: 'gif',
+            18: 'jpeg',
+            19: 'jpg',
+            20: 'mp4',
+            21: 'jpg',
+            22: 'png',
+            23: 'jpg',
+            24: 'jpeg',
+            25: 'jpg',
+            26: 'mp4',
+            27: 'png',
+            28: 'mp4',
+            29: 'jpg',
+            30: 'mp4',
+            31: 'jpeg',
+            32: 'jpg'
+        };
+        const artworkNames = {
+            1: 'Pixel Art 1 El Santo',
+            2: 'Pixel Art 2 Lady Apache',
+            3: 'Pixel Art 3 Dark Angel',
+            4: 'Pixel Art 4 Blue Demon',
+            5: 'Pixel Art 5 La Jarochita',
+            6: 'Pixel Art 6 Solar',
+            7: 'Pixel Art 7 Dr. Wagner Jr',
+            8: 'Pixel Art 8 Faby Apache',
+            9: 'Pixel Art 9 La Guerrera',
+            10: 'Pixel Art 10 La Parka',
+            11: 'Pixel Art 11 Silver King',
+            12: 'Pixel Art 12 Octagon',
+            13: 'Momento Vivere',
+            14: 'The eco-symbiosis',
+            15: 'The Rose',
+            16: 'Little Breadhead\'s Ocean Hope',
+            17: 'Peaceful Earth',
+            18: 'Bhoomi - Mother Earth',
+            19: 'Diana',
+            20: 'Like the snail I carry my home wherever I go',
+            21: 'The harsh reality of a turtle',
+            22: 'The Wolf',
+            23: 'Chliodhnas footprint',
+            24: 'Whale garden',
+            25: 'Last Hope',
+            26: 'Time Tree',
+            27: 'Antartic Ocean Station',
+            28: 'A Solitary Pilgrimage',
+            29: 'g4rd3n fu11 0f r0$3$',
+            30: 'Conjoined Tress Universe',
+            31: 'Garden of Whales',
+            32: 'El Green'
+        };
+
+        function updateMintConfig() {
+            const address = document.getElementById('walletAddress').value;
+            const quantity = document.getElementById('quantity').value;
+            const artworkNumber = document.getElementById('artworkNumber').value;
+            const referralCode = document.getElementById('referralCode').value;
+            const payButton = document.querySelector('crossmint-pay-button');
+            payButton.setAttribute('mintTo', address);
+            payButton.setAttribute('mintConfig', JSON.stringify({ totalPrice: (0.02 * quantity).toFixed(2), id: artworkNumber, amount: quantity, data: "0x", referral: referralCode }));
+            updateArtworkDisplay(artworkNumber);
+        }
+
+        function updateArtworkDisplay(artworkNumber) {
+            const extension = fileExtensions[artworkNumber];
+            const artworkDisplay = document.getElementById('artworkDisplay');
+            const url = `https://ipfs.io/ipfs/${baseHash}/${artworkNumber}.${extension}`;
+
+            if (extension === 'mp4') {
+                artworkDisplay.innerHTML = `<video class="artwork-media" controls><source src="${url}" type="video/mp4">Your browser does not support the video tag.</video>`;
+            } else {
+                artworkDisplay.innerHTML = `<img class="artwork-media" src="${url}" alt="Artwork ${artworkNumber}">`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('walletAddress').addEventListener('input', updateMintConfig);
+            document.getElementById('quantity').addEventListener('change', updateMintConfig);
+            document.getElementById('artworkNumber').addEventListener('change', updateMintConfig);
+            document.getElementById('referralCode').addEventListener('change', updateMintConfig);
+            updateArtworkDisplay(1); // Initialize with the first artwork
+        });
+    </script>
+</head>
+<body>
+    <div id="crossmint-container">
+        <div class="left-panel">
+            <div id="artworkDisplay" class="artwork-display"></div>
+        </div>
+        <div class="right-panel">
+            <label for="artworkNumber">Select artwork number:</label>
+            <select id="artworkNumber" name="artworkNumber">
+                <option value="1">El Santo</option>
+                <option value="2">Lady Apache</option>
+                <option value="3">Dark Angel</option>
+                <option value="4">Blue Demon</option>
+                <option value="5">La Jarochita</option>
+                <option value="6">Solar</option>
+                <option value="7">Dr. Wagner Jr</option>
+                <option value="8">Faby Apache</option>
+                <option value="9">La Guerrera</option>
+                <option value="10">La Parka</option>
+                <option value="11">Silver King</option>
+                <option value="12">Octagon</option>
+                <option value="13">Momento Vivere</option>
+                <option value="14">The eco-symbiosis</option>
+                <option value="15">The Rose</option>
+                <option value="16">Little Breadhead's Ocean Hope</option>
+                <option value="17">Peaceful Earth</option>
+                <option value="18">Bhoomi - Mother Earth</option>
+                <option value="19">Diana</option>
+                <option value="20">Like the snail I carry my home wherever I go</option>
+                <option value="21">The harsh reality of a turtle</option>
+                <option value="22">The Wolf</option>
+                <option value="23">Chliodhnas footprint</option>
+                <option value="24">Whale garden</option>
+                <option value="25">Last Hope</option>
+                <option value="26">Time Tree</option>
+                <option value="27">Antartic Ocean Station</option>
+                <option value="28">A Solitary Pilgrimage</option>
+                <option value="29">g4rd3n fu11 0f r0$3$</option>
+                <option value="30">Conjoined Tress Universe</option>
+                <option value="31">Garden of Whales</option>
+                <option value="32">El Green</option>
+            </select>
+
+            <label for="quantity">Enter quantity:</label>
+            <select id="quantity" name="quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <label for="walletAddress">Enter your wallet address:</label>
+            <input type="text" id="walletAddress" name="walletAddress">
+            
+            <div class="explanation">Enter your wallet address or leave it blank to use your Crossmint default wallet.</div>
+
+            <label for="referralCode">Select referral code:</label>
+            <select id="referralCode" name="referralCode">
+                <option value="0x53aebA3b107774a8380341c7429Bf352127fA1A3">No Referral</option>
+                <option value="0x967D8384750A72B06631156416FD9d59c5F334f5">Referral Address Test</option>
+            </select>
+
+            <div class="button-container">
+                <crossmint-pay-button
+                    collectionId="b0f05d88-f478-449e-b6fc-693ce9d389a4"
+                    projectId="25e5afde-c51b-4c7d-a1b4-f68dff039535"
+                    mintConfig='{"totalPrice":"0.02","id":"1","amount":"1","data":"0x", "referral":"0x53aebA3b107774a8380341c7429Bf352127fA1A3"}'
+                    environment="staging"
+                    checkoutProps='{"paymentMethods":["fiat","ETH","SOL"]}'
+                    mintTo=""
+                ></crossmint-pay-button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

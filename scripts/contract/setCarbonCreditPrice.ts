@@ -8,6 +8,8 @@ const providerUrl = `https://polygon-amoy.infura.io/v3/${process.env.INFURA_PROJ
 // Private key of the account you want to use
 const privateKey = `${process.env.PRIVATE_KEY}`;
 
+const newPrice = ethers.parseEther("0.002"); // 0.002 MATIC;
+
 async function main() {
     // Connect to Ethereum network
     const provider = ethers.getDefaultProvider("matic-amoy");
@@ -19,9 +21,11 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Call getTokenName function
-    const name = await contract.name();
-    console.log("Token Name:", name);
+    // Call updateUri function
+    const tx = await contract.setCarbonCreditPrice(newPrice);
+    await tx.wait();
+    console.log(`New Carbon Credit Price: ${newPrice.toString()}`);
+
 }
 
 main().catch(error => {
