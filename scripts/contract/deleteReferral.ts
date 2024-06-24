@@ -8,7 +8,7 @@ const providerUrl = `https://polygon-amoy.infura.io/v3/${process.env.INFURA_PROJ
 // Private key of the account you want to use
 const privateKey = `${process.env.PRIVATE_KEY}`;
 
-const newUri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
+const newPrice = ethers.parseEther("0.002"); // 0.002 MATIC;
 
 async function main() {
     // Connect to Ethereum network
@@ -22,10 +22,21 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Call updateUri function
-    const tx = await contract.setURI(newUri);
-    await tx.wait();
-    console.log("URI updated successfully.");
+    // Example referrals to register
+    const referrals = [
+        `${process.env.REFERRAL_ADDRESS}`
+    ];
+
+    // Register each referral
+    for (const referral of referrals) {
+        console.log(`Deleting referral: ${referral}`);
+        const tx = await contract.deleteReferral(referral);
+        await tx.wait();
+        console.log(`Referral deleted: ${referral}`);
+    }
+
+    console.log('All referrals deleted successfully');
+
 }
 
 main().catch(error => {

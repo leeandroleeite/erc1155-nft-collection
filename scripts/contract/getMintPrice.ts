@@ -8,11 +8,8 @@ const providerUrl = `https://polygon-amoy.infura.io/v3/${process.env.INFURA_PROJ
 // Private key of the account you want to use
 const privateKey = `${process.env.PRIVATE_KEY}`;
 
-const newUri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
-
 async function main() {
     // Connect to Ethereum network
-    // const provider = ethers.getDefaultProvider("matic-amoy");
     const provider = new ethers.JsonRpcProvider(providerUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -22,10 +19,9 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Call updateUri function
-    const tx = await contract.setURI(newUri);
-    await tx.wait();
-    console.log("URI updated successfully.");
+    // Call getMintPrice function
+    const mintPrice = await contract.getMintPrice();
+    console.log("Mint Price:", ethers.formatEther(mintPrice));
 }
 
 main().catch(error => {

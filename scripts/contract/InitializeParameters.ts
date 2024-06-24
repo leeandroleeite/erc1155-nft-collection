@@ -9,7 +9,9 @@ const privateKey = `${process.env.PRIVATE_KEY}`;
 
 async function main() {
     // Connect to Ethereum network
-    const provider = ethers.getDefaultProvider("matic-amoy");
+    // const provider = ethers.getDefaultProvider("matic-amoy");
+    const provider = new ethers.JsonRpcProvider(providerUrl);
+
     const wallet = new ethers.Wallet(privateKey, provider);
 
     // ERC-1155 contract ABI

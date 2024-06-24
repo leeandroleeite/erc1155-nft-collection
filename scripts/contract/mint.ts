@@ -9,7 +9,8 @@ const privateKey = `${process.env.PRIVATE_KEY}`;
 
 async function main() {
     // Connect to Ethereum network
-    const provider = ethers.getDefaultProvider("matic-amoy");
+    // const provider = ethers.getDefaultProvider("matic-amoy");
+    const provider = new ethers.JsonRpcProvider(providerUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const fromAddress = wallet.address;
@@ -23,7 +24,7 @@ async function main() {
 
     // Example: Mint Tokens
     // const to = fromAddress;
-    const tokenId = 13; // ID of the token you want to mint
+    const tokenId = 14; // ID of the token you want to mint
     // const recipientAddress = fromAddress;
     const amount = 1; // Amount of tokens to mint
     const payment = (0.02 * amount).toString()

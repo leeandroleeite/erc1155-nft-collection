@@ -8,7 +8,8 @@ const providerUrl = `https://polygon-amoy.infura.io/v3/${process.env.INFURA_PROJ
 // Private key of the account you want to use
 const privateKey = `${process.env.PRIVATE_KEY}`;
 
-const newUri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
+const newCarbonCreditPrice = ethers.parseEther("0.001"); // For example, 1 ETH
+
 
 async function main() {
     // Connect to Ethereum network
@@ -22,11 +23,18 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Call updateUri function
-    const tx = await contract.setURI(newUri);
+    // Call setCarbonCreditPrice function
+    const tx = await contract.setCarbonCreditPrice(newCarbonCreditPrice);
+    console.log("Transaction Hash:", tx.hash);
+
+    // Wait for the transaction to be mined
     await tx.wait();
-    console.log("URI updated successfully.");
-}
+    console.log("Transaction confirmed.");
+
+    // Verify the new carbon credit price
+    const updatedCarbonCreditPrice = await contract.getCarbonCreditPrice();
+    console.log("Updated Carbon Credit Price:", ethers.formatEther(updatedCarbonCreditPrice));
+    }
 
 main().catch(error => {
     console.error("Error:", error);

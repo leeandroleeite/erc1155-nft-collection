@@ -9,7 +9,8 @@ const privateKey = `${process.env.PRIVATE_KEY}`;
 
 async function main() {
     // Connect to Ethereum network
-    const provider = ethers.getDefaultProvider("matic-amoy");
+    // const provider = ethers.getDefaultProvider("matic-amoy");
+    const provider = new ethers.JsonRpcProvider(providerUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const fromAddress = wallet.address;
@@ -22,7 +23,7 @@ async function main() {
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
     // Example: Admin Mint Tokens
-    const tokenId = 4; // ID of the token you want to mint
+    const tokenId = 14; // ID of the token you want to mint
     const recipientAddress = ethers.ZeroAddress; // Replace with the recipient address or use address(0) to mint to the owner
     console.log(recipientAddress);
     const amount = 1; // Amount of tokens to mint

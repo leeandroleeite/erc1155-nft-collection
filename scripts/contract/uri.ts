@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import contractArtifact from "../../artifacts/contracts/ERC1155Token.sol/ERC1155Token.json";
+import contractArtifact from "../../artifacts/contracts/ConsciousPlanetCollection.sol/ConsciousPlanetCollection.json";
 
 // ERC-1155 contract address
 const contractAddress = `${process.env.CONTRACT_ADDRESS}`;
@@ -10,7 +10,8 @@ const privateKey = `${process.env.PRIVATE_KEY}`;
 
 async function main() {
     // Connect to Ethereum network
-    const provider = ethers.getDefaultProvider("matic-amoy");
+    // const provider = ethers.getDefaultProvider("matic-amoy");
+    const provider = new ethers.JsonRpcProvider(providerUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     // ERC-1155 contract ABI

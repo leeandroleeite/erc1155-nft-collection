@@ -9,10 +9,10 @@ const privateKey = `${process.env.PRIVATE_KEY}`;
 
 async function main() {
     // Connect to Ethereum network
-    const provider = ethers.getDefaultProvider("matic-amoy");
-    const wallet = new ethers.Wallet(privateKey, provider);
+    // const provider = ethers.getDefaultProvider("matic-amoy");
+    const provider = new ethers.JsonRpcProvider(providerUrl);
 
-    const fromAddress = wallet.address;
+    const wallet = new ethers.Wallet(privateKey, provider);
 
     // ERC-1155 contract ABI
     const abi = contractArtifact.abi;
@@ -63,8 +63,9 @@ async function main() {
 
     // Call initializeArtworks function
     const tx = await contract.initializeArtworks(ids, artists, curators);
-    await tx.wait();
+    console.log("Transaction Hash:", tx.hash);
 
+    await tx.wait();
     console.log(`Initialized artworks with IDs: ${ids.join(', ')}`);
 }
 

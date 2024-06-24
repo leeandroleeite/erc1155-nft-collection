@@ -8,11 +8,14 @@ const providerUrl = `https://polygon-amoy.infura.io/v3/${process.env.INFURA_PROJ
 // Private key of the account you want to use
 const privateKey = `${process.env.PRIVATE_KEY}`;
 
-const newUri = "https://ipfs.io/ipfs/QmamHkp2beGfgyJwhwp87jEUJA4Eicoo9HRx4aUtBbC2XE/{id}.json";
+// Artwork ID and new artist address
+const artworkId = 1;
+// const newArtistAddress = "0x0000000000000000000000000000000000000000";
+const newArtistAddress = "0x85C57c423D3Fc998B66F02b65CD3AfD7F5787Dc0";
+
 
 async function main() {
     // Connect to Ethereum network
-    // const provider = ethers.getDefaultProvider("matic-amoy");
     const provider = new ethers.JsonRpcProvider(providerUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -22,10 +25,17 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Call updateUri function
-    const tx = await contract.setURI(newUri);
+    // Call setArtistAddress function
+    const tx = await contract.setArtistAddress(artworkId, newArtistAddress);
+    console.log("Transaction Hash:", tx.hash);
+
+    // Wait for the transaction to be mined
     await tx.wait();
-    console.log("URI updated successfully.");
+    console.log("Transaction confirmed. Artist address updated.");
+
+    // Verify the new artist address
+    const updatedArtistAddress = await contract.getArtistAddress(artworkId);
+    console.log("Updated Artist Address for Artwork ID", artworkId, ":", updatedArtistAddress);
 }
 
 main().catch(error => {

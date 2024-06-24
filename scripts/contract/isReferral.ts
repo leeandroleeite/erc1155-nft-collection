@@ -12,7 +12,8 @@ const newPrice = ethers.parseEther("0.002"); // 0.002 MATIC;
 
 async function main() {
     // Connect to Ethereum network
-    const provider = ethers.getDefaultProvider("matic-amoy");
+    // const provider = ethers.getDefaultProvider("matic-amoy");
+    const provider = new ethers.JsonRpcProvider(providerUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
 
     // ERC-1155 contract ABI
@@ -21,11 +22,17 @@ async function main() {
     // Instantiate ERC-1155 contract
     const contract = new ethers.Contract(contractAddress, abi, wallet);
 
-    // Call updateUri function
-    const tx = await contract.setCarbonCreditPrice(newPrice);
-    await tx.wait();
-    console.log(`New Carbon Credit Price: ${newPrice.toString()}`);
+    // Example referrals to register
+    const referrals = [
+        `${process.env.REFERRAL_ADDRESS}`
+    ];
 
+    // Register each referral
+    for (const referral of referrals) {
+        console.log(`Checking referral: ${referral}`);
+        const tx = await contract.isReferralRegistered(referral);
+        console.log("Is Referral Registered:", tx);
+    }
 }
 
 main().catch(error => {

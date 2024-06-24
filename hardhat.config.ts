@@ -16,8 +16,8 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {},
-    goerli: {
-      url: `https://goerli.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+    mainnet: {
+      url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
       accounts: [`0x${process.env.PRIVATE_KEY}`]
     },
     amoy: {
