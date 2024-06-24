@@ -384,6 +384,9 @@ contract ConsciousPlanetCollection is ERC1155, Ownable, ERC1155Supply {
         uint256 projectOwnerPayment = artworkPrice * _projectOwnerShare / 100;
         uint256 referralPayment = (artworkPrice * _referralShare) / 100;
 
+        _mint(to, id, amount, data);
+        artworks[id].remainingCopies -= amount;
+
         address referralRecipient = referral;
         if (referralRecipient == address(0) || !registeredReferrals[referralRecipient]) {
             referralRecipient = _projectOwnerAddress;
@@ -401,9 +404,6 @@ contract ConsciousPlanetCollection is ERC1155, Ownable, ERC1155Supply {
         if (remainingBalance > 0) {
             payable(owner()).transfer(remainingBalance);
         }
-
-        _mint(to, id, amount, data);
-        artworks[id].remainingCopies -= amount;
     }
 
     /**
